@@ -1,5 +1,4 @@
-# SoftEngProject
-Software Engineering Project Prototype
+# Software Engineering Project Prototype
 
 Functions required to be implemented;
 
