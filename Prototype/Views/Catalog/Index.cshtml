@@ -25,15 +25,13 @@
                     @foreach  (var book in Model)
                     {
                         <tr>
-                            <td width="30%">@book.Name</td>
+                            <td width="30%"><a asp-area="" asp-controller="Catalog" asp-action="Details">@book.Name</a></td>
                             <td width="30%">@book.Publisher</td>
                             <td width="30%">@book.Author</td>
                         </tr> 
                     }
                 </tbody>
             </table>
-          
-
     </div>
 </div>
 

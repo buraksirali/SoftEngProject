@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Prototype.Models
 {
     public class Book
     {
         [Key]
+        public int ID { get; set; }
+
         public string ISBN { get; set; }
 
         public string Name { get; set; }
@@ -18,5 +19,6 @@ namespace Prototype.Models
 
         public string Genre { get; set; }
 
+        public string PdfPath { get; set; }
     }
 }
