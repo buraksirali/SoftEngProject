@@ -21,6 +21,30 @@ namespace Prototype.Controllers
         {
             return View(modelFactory.GetBooks());
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Book obj)
+        {
+            if (obj == null)
+            {
+                return BadRequest("Given book doesn't have enough information.");
+            }
+
+            modelFactory.AddBook(obj);
+
+            return RedirectToAction("Success", obj);
+        }
+
+        public IActionResult Success(Book obj)
+        {
+            return View(obj);
+        }
+
 
         public IActionResult Detail(int id)
         {

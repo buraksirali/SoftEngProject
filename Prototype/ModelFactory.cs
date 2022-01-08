@@ -23,5 +23,11 @@ namespace Prototype
         {
             return GetBooks().Where(x => x.ID == id).First();
         }
+
+        public void AddBook(Book obj)
+        {
+            _db.Add(obj);
+            _db.SaveChanges();
+        }
     }
 }
