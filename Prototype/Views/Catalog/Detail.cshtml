@@ -11,6 +11,12 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ISBN)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
@@ -40,13 +46,10 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Genre)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PdfPath)
-        </dt>
     </dl>
 </div>
 <div>
-    <button><a href="">Read the book</a></button>
-    <a asp-action="Edit" asp-route-id="@Model.ISBN">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-success">Edit</a> |
+    <a asp-action="Read" asp-controller="Book" asp-route-id="@Model.ID" class="btn btn-primary">Read the book</a> |
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>

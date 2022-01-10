@@ -17,10 +17,34 @@ namespace Prototype.Controllers
             modelFactory = new ModelFactory(_db);
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searching)
         {
-            return View(modelFactory.GetBooks());
+            return View(modelFactory.GetBooks(searching));
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Book obj)
+        {
+            if (obj == null)
+            {
+                return BadRequest("Given book doesn't have enough information.");
+            }
+
+            modelFactory.AddBook(obj);
+
+            return RedirectToAction("Success", obj);
+        }
+
+        public IActionResult Success(Book obj)
+        {
+            return View(obj);
+        }
+
 
         public IActionResult Detail(int id)
         {
