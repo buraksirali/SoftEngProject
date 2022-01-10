@@ -34,9 +34,21 @@ namespace Prototype
             _db.SaveChanges();
         }
 
-        public IEnumerable<string> GetPages(Book obj)
+        public string GetPath(int id, bool fileIsPdf)
         {
-            string path = Directory.GetCurrentDirectory() + @"\PdfFiles\" + obj.PdfName + @".pdf";
+            Book obj = GetBook(id);
+            
+            if (fileIsPdf)
+            {
+                return Directory.GetCurrentDirectory() + @"\PdfFiles\" + obj.PdfName + @".pdf";
+            }
+
+            return Directory.GetCurrentDirectory() + @"\AudioFiles\" + obj.PdfName;
+        }
+
+        public IEnumerable<string> GetPages(int id)
+        {
+            string path = GetPath(id, true);
 
             var pages = new List<string>();
 
