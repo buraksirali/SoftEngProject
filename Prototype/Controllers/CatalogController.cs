@@ -17,9 +17,9 @@ namespace Prototype.Controllers
             modelFactory = new ModelFactory(_db);
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searching)
         {
-            return View(modelFactory.GetBooks());
+            return View(modelFactory.GetBooks(searching));
         }
         public IActionResult Create()
         {

@@ -7,9 +7,11 @@ using System.Text;
 using System;
 using System.IO;
 using Prototype.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Prototype.Controllers
 {
+    [Authorize]
     public class BookController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -32,8 +34,8 @@ namespace Prototype.Controllers
 
             string path = Directory.GetCurrentDirectory() + @"\PdfFiles\" +  book.PdfName + @".pdf";
 
-            StringBuilder sb = new StringBuilder();
-            using (PdfReader reader = new PdfReader(path))
+            StringBuilder sb = new();
+            using (PdfReader reader = new(path))
             {
                 for (int page = 1; page <= reader.NumberOfPages; page++)
                 {
