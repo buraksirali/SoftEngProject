@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/Prototype/Migrations/20220110202332_last.cs
+/Prototype/Migrations/20220110202332_last.Designer.cs

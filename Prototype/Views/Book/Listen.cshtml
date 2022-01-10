@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Listen";
+    var path = @ViewBag.path + ".mp3";
+    var pathOgg = @ViewBag.path + ".ogg";
+}
+
+<h1>Listen to the Book: @ViewBag.BookName</h1>
+
+<div>
+    <audio controls>
+        <source src="@pathOgg" type="audio/ogg" />
+        <source src="@path" type="audio/mpeg" />
+    </audio>
+
+</div>

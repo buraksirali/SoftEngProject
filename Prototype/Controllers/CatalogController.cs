@@ -45,7 +45,6 @@ namespace Prototype.Controllers
             return View(obj);
         }
 
-
         public IActionResult Detail(int id)
         {
             return View(modelFactory.GetBook(id));

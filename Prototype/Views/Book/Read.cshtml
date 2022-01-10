@@ -6,13 +6,21 @@
 
 <h1>@Html.DisplayFor(model => model.Name)</h1>
 
-<button class="color-reverse btn btn-dark btn-light" onclick="reverseColors()">Dark Mode</button>
+<style>
+    .highlighted {
+        color:red;
+        background-color: yellow;
+        display: inline;
+    }
+</style>
 
 <script>
-    var divs = document.getElementsByTagName("div");
+    var spanStack = [];
+
+
     function reverseColors() {
         var body = $("body")[0];
-        var text = $(".page-text")[0];
+        var text = $("#page-text");
 
         body.classList.toggle("bg-dark");
         text.classList.toggle("text-light");
@@ -28,40 +36,55 @@
             colorButton.textContent = "Dark Mode";
         }
     }
-</script>
-<button onclick="highlightSelection()">Highlight </button>
-<script>
-        function highlightSelection() {
+
+
+    function highlightSelection() {
         var userSelection = window.getSelection();
         for(var i = 0; i < userSelection.rangeCount; i++) {
             highlightRange(userSelection.getRangeAt(i));
         }
     }
 
+
     function highlightRange(range) {
         var newNode = document.createElement("span");
-        newNode.setAttribute(
-           "style",
-           "color:red ;background-color: yellow; display: inline;"
-        );
+        newNode.classList.add("highlighted");
         range.surroundContents(newNode);
+        spanStack.push(newNode);
+    }
+    
+
+    function removeLastHighlight() {
+        var span = spanStack.pop();
+        var text = span.textContent;
+        span.parentNode.replaceChild(document.createTextNode(text), span);
     }
 
+    
+    function boyutlandir(multiplier) { 
+        var c = document.getElementById("page-text");
+        if (c.style.fontSize == "") {
+            c.style.fontSize = "1.0em";
+        } 
+        c.style.fontSize = parseFloat(c.style.fontSize) + (multiplier * 0.2) + "em";
+    } 
 </script>
 
+<button class="color-reverse btn btn-dark btn-light" onclick="reverseColors()">Dark Mode</button>
+<button class="btn btn-warning" onclick="highlightSelection()">Highlight</button>
+<button class="btn btn-danger" onclick="removeLastHighlight()">Remove Last Highlight</button>
+<hr />
+<p id="page-text"> <span style="white-space: pre-line"> @ViewBag.book </span></p>
 
+<div class="row justify-content-between">
+    <div>
+        <a asp-action="Previous" asp-controller="Book" class="btn btn-primary">Previous Page</a> |
+        <a asp-action="Next" asp-controller="Book" class="btn btn-primary">Next Page</a> |
+    </div>
 
-    <hr />
-        <p class="page-text"> <span style="white-space: pre-line"> @ViewBag.book </span> </p>
+    <div class="justify-content-end">
+        <button onclick="boyutlandir(-1)" class="btn btn-info">Küçült</button> | 
+        <button onclick="boyutlandir(1)" class="btn btn-info">Büyüt</button>
+    </div>  
 </div>
-<div>
-    <a asp-action="Previous" asp-controller="Book" class="btn btn-primary">Previous Page</a> |
-    <a asp-action="Next" asp-controller="Book" class="btn btn-primary">Next Page</a> 
-    <button onclick="boyutlandir(-1)" class="btn btn-info">
-    Küçült</button> | <button  onclick="boyutlandir(1)" class="btn btn-info"> Büyüt</button>  
-    <script type="text/javascript"> 
-    var c = document.getElementsByClassName("page-text")[0]; 
-    function boyutlandir(multiplier) { if (c.style.fontSize == "") { c.style.fontSize = "1.0em"; } 
-    c.style.fontSize = parseFloat(c.style.fontSize) + (multiplier * 0.2) + "em"; } 
-    </script>
-</div>
+        

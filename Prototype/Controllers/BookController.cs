@@ -24,9 +24,9 @@ namespace Prototype.Controllers
 
         public IActionResult Index(int id)
         {
-            Pages = modelFactory.GetPages(modelFactory.GetBook(id));
+            Pages = modelFactory.GetPages(id);
             HttpContext.Session.SetString("Pages", JsonConvert.SerializeObject(Pages));
-            HttpContext.Session.SetString("PageNumber", "1");
+            HttpContext.Session.SetString("PageNumber", "0");
 
             return RedirectToAction("read");
         }
@@ -36,7 +36,7 @@ namespace Prototype.Controllers
             Pages = JsonConvert.DeserializeObject<IEnumerable<string>>(HttpContext.Session.GetString("Pages"));
             int pageNum = int.Parse(HttpContext.Session.GetString("PageNumber"));
 
-            if (pageNum > 0)
+            if (pageNum > -1)
             {
                 if (pageNum > Pages.Count())
                 {
@@ -44,10 +44,22 @@ namespace Prototype.Controllers
                 }
 
                 ViewBag.book = Pages.ElementAt(pageNum);
-            } else
+            }
+            else
             {
                 ViewBag.book = Pages.ElementAt(0);
+                HttpContext.Session.SetString("PageNumber", "0");
             }
+
+            return View();
+        }
+
+        public IActionResult Listen(int id)
+        {
+            string path = modelFactory.GetPath(id, false);
+
+            ViewBag.path = path;
+            ViewBag.BookName = modelFactory.GetBook(id).Name;
 
             return View();
         }
