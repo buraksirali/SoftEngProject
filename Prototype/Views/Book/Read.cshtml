@@ -8,8 +8,9 @@
 
 <div>
     <hr />
-        <p> <span style="white-space: pre-line"> @ViewBag.book </span> </p>
+        <p class="page-text"> <span style="white-space: pre-line"> @ViewBag.book </span> </p>
 </div>
 <div>
-
+    <a asp-action="Previous" asp-controller="Book" class="btn btn-primary">Previous Page</a> |
+    <a asp-action="Next" asp-controller="Book" class="btn btn-primary">Next Page</a>
 </div>
