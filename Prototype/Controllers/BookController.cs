@@ -5,6 +5,8 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System.Text;
 using System;
+using System.IO;
+using Prototype.Models;
 
 namespace Prototype.Controllers
 {
@@ -26,14 +28,9 @@ namespace Prototype.Controllers
 
         public IActionResult Read(int id)
         {
-            // Pdf To Text
-            /*Dictionary<string, string> data = new Dictionary<string, string>()
-            {
-                text: "",
-                name: ""
-            }*/
+            Book book = modelFactory.GetBook(id);
 
-            string path = @"c:\Users\ABRA\Documents\Hayvanlar.pdf";
+            string path = Directory.GetCurrentDirectory() + @"\PdfFiles\" +  book.PdfName + @".pdf";
 
             StringBuilder sb = new StringBuilder();
             using (PdfReader reader = new PdfReader(path))
