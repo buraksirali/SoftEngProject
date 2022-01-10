@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prototype.Data;
 using System.Collections.Generic;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-using System.Text;
-using System;
-using System.IO;
+using System.Linq;
 using Prototype.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Prototype.Controllers
 {
@@ -16,6 +14,7 @@ namespace Prototype.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ModelFactory modelFactory;
+        private IEnumerable<string> Pages;
 
         public BookController(ApplicationDbContext db)
         {
@@ -25,32 +24,50 @@ namespace Prototype.Controllers
 
         public IActionResult Index(int id)
         {
+            Pages = modelFactory.GetPages(modelFactory.GetBook(id));
+            HttpContext.Session.SetString("Pages", JsonConvert.SerializeObject(Pages));
+            HttpContext.Session.SetString("PageNumber", "1");
+
+            return RedirectToAction("read");
+        }
+
+        public IActionResult Read()
+        {
+            Pages = JsonConvert.DeserializeObject<IEnumerable<string>>(HttpContext.Session.GetString("Pages"));
+            int pageNum = int.Parse(HttpContext.Session.GetString("PageNumber"));
+
+            if (pageNum > 0)
+            {
+                if (pageNum > Pages.Count())
+                {
+                    ViewBag.book = Pages.Last();
+                }
+
+                ViewBag.book = Pages.ElementAt(pageNum);
+            } else
+            {
+                ViewBag.book = Pages.ElementAt(0);
+            }
+
             return View();
         }
 
-        public IActionResult Read(int id)
+        public IActionResult Next()
         {
-            Book book = modelFactory.GetBook(id);
+            int pageNum = int.Parse(HttpContext.Session.GetString("PageNumber"));
 
-            string path = Directory.GetCurrentDirectory() + @"\PdfFiles\" +  book.PdfName + @".pdf";
+            HttpContext.Session.SetString("PageNumber", $"{pageNum + 1}");
 
-            StringBuilder sb = new();
-            using (PdfReader reader = new(path))
-            {
-                for (int page = 1; page <= reader.NumberOfPages; page++)
-                {
-                    ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
-                    string text = PdfTextExtractor.GetTextFromPage(reader, page, strategy);
-                    text = Encoding.UTF8.GetString(ASCIIEncoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(text)));
-                    sb.Append(text);
-                }
-            }
+            return RedirectToAction("read");
+        }
 
-            ViewBag.book = sb.ToString();
+        public IActionResult Previous()
+        {
+            int pageNum = int.Parse(HttpContext.Session.GetString("PageNumber"));
 
-            Console.WriteLine(sb.ToString());
+            HttpContext.Session.SetString("PageNumber", $"{pageNum - 1}");
 
-            return View(modelFactory.GetBook(id));
+            return RedirectToAction("read");
         }
     }
 }

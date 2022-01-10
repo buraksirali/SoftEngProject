@@ -34,7 +34,7 @@
             @foreach  (var book in Model)
             {
                 <tr>
-                    <td class="col-4"><a asp-area="" asp-controller="Catalog" asp-action="Detail" asp-route-id="@book.ID">@book.Name</a></td>
+                    <td class="col-4"><a asp-controller="Catalog" asp-action="Detail" asp-route-id="@book.ID">@book.Name</a></td>
                     <td class="col-4">@book.Publisher</td>
                     <td class="col-4">@book.Author</td>
                 </tr> 
